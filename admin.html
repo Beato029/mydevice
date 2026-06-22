@@ -98,6 +98,26 @@
     <div class="admin-list">
       <h3>Catalogo attuale</h3>
       <div id="aList"></div>
+
+      <div class="admin-pw" style="margin-top:2rem;padding-top:1.5rem;border-top:1px solid #2a2a2a">
+        <h3>Cambia password</h3>
+        <form id="pwForm">
+          <div class="f-group">
+            <label>Password attuale *</label>
+            <input type="password" id="pwCurrent" placeholder="••••••••" autocomplete="current-password" required>
+          </div>
+          <div class="f-group">
+            <label>Nuova password *</label>
+            <input type="password" id="pwNext" placeholder="almeno 6 caratteri" autocomplete="new-password" required>
+          </div>
+          <div class="f-group">
+            <label>Conferma nuova password *</label>
+            <input type="password" id="pwConfirm" placeholder="ripeti la nuova password" autocomplete="new-password" required>
+          </div>
+          <div class="login-err" id="pwErr" style="display:none;margin-bottom:0.6rem"></div>
+          <button type="submit" class="btn-add" id="pwSubmit">Aggiorna password</button>
+        </form>
+      </div>
     </div>
 
   </div>

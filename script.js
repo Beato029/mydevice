@@ -485,6 +485,42 @@ async function initAdmin() {
         }
     });
 
+    // ── Cambia password ──
+    const pwForm = document.getElementById('pwForm');
+    if (pwForm) {
+        const pwErr    = document.getElementById('pwErr');
+        const pwSubmit = document.getElementById('pwSubmit');
+        const showErr  = msg => { pwErr.textContent = msg; pwErr.style.display = 'block'; };
+
+        pwForm.addEventListener('submit', async e => {
+            e.preventDefault();
+            pwErr.style.display = 'none';
+
+            const current = document.getElementById('pwCurrent').value;
+            const next    = document.getElementById('pwNext').value;
+            const confirm = document.getElementById('pwConfirm').value;
+
+            if (next !== confirm) { showErr('La nuova password e la conferma non coincidono.'); return; }
+            if (next.length < 6)  { showErr('La nuova password deve avere almeno 6 caratteri.'); return; }
+
+            pwSubmit.disabled = true;
+            pwSubmit.textContent = 'Aggiornamento...';
+            try {
+                await apiFetch('/change-password.php', {
+                    method: 'POST',
+                    body: JSON.stringify({ current, next, confirm })
+                });
+                toast('Password aggiornata. Usala al prossimo accesso.', 'success');
+                pwForm.reset();
+            } catch (err) {
+                showErr(err.message);
+            } finally {
+                pwSubmit.disabled = false;
+                pwSubmit.textContent = 'Aggiorna password';
+            }
+        });
+    }
+
     await renderList();
 }
 
