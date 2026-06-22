@@ -29,7 +29,10 @@
       <h1 class="pg-title" style="margin-bottom:0">Pannello <em>Admin</em></h1>
       <p class="pg-sub" style="margin-top:0.25rem">Gestisci il catalogo.</p>
     </div>
-    <button id="btnLogout" style="background:#1a1a1a;border:1px solid #333;color:#888;border-radius:8px;padding:0.5rem 1.25rem;font-size:0.85rem;cursor:pointer;transition:color .2s,border-color .2s" onmouseover="this.style.color='#ff3b30';this.style.borderColor='rgba(255,59,48,.4)'" onmouseout="this.style.color='#888';this.style.borderColor='#333'">Esci</button>
+    <div style="display:flex;gap:0.6rem;flex-wrap:wrap">
+      <button id="btnChangePw" style="background:#1a1a1a;border:1px solid #333;color:#888;border-radius:8px;padding:0.5rem 1.25rem;font-size:0.85rem;cursor:pointer;transition:color .2s,border-color .2s" onmouseover="this.style.color='#2196F3';this.style.borderColor='rgba(33,150,243,.4)'" onmouseout="this.style.color='#888';this.style.borderColor='#333'">Cambia password</button>
+      <button id="btnLogout" style="background:#1a1a1a;border:1px solid #333;color:#888;border-radius:8px;padding:0.5rem 1.25rem;font-size:0.85rem;cursor:pointer;transition:color .2s,border-color .2s" onmouseover="this.style.color='#ff3b30';this.style.borderColor='rgba(255,59,48,.4)'" onmouseout="this.style.color='#888';this.style.borderColor='#333'">Esci</button>
+    </div>
   </div>
 
   <div class="admin-layout">
@@ -98,26 +101,6 @@
     <div class="admin-list">
       <h3>Catalogo attuale</h3>
       <div id="aList"></div>
-
-      <div class="admin-pw" style="margin-top:2rem;padding-top:1.5rem;border-top:1px solid #2a2a2a">
-        <h3>Cambia password</h3>
-        <form id="pwForm">
-          <div class="f-group">
-            <label>Password attuale *</label>
-            <input type="password" id="pwCurrent" placeholder="••••••••" autocomplete="current-password" required>
-          </div>
-          <div class="f-group">
-            <label>Nuova password *</label>
-            <input type="password" id="pwNext" placeholder="almeno 6 caratteri" autocomplete="new-password" required>
-          </div>
-          <div class="f-group">
-            <label>Conferma nuova password *</label>
-            <input type="password" id="pwConfirm" placeholder="ripeti la nuova password" autocomplete="new-password" required>
-          </div>
-          <div class="login-err" id="pwErr" style="display:none;margin-bottom:0.6rem"></div>
-          <button type="submit" class="btn-add" id="pwSubmit">Aggiorna password</button>
-        </form>
-      </div>
     </div>
 
   </div>
@@ -133,6 +116,31 @@
   </ul>
   <p class="footer-copy">© 2025 MyDevice · Bologna, Italia</p>
 </footer>
+
+<div class="modal-bg" id="pwModal">
+  <div class="modal-box" style="text-align:left">
+    <h3 style="margin-top:0">Cambia <em style="color:var(--blue);font-style:normal">password</em></h3>
+    <form id="pwForm">
+      <div class="f-group">
+        <label>Password attuale *</label>
+        <input type="password" id="pwCurrent" placeholder="••••••••" autocomplete="current-password" required>
+      </div>
+      <div class="f-group">
+        <label>Nuova password *</label>
+        <input type="password" id="pwNext" placeholder="almeno 6 caratteri" autocomplete="new-password" required>
+      </div>
+      <div class="f-group">
+        <label>Conferma nuova password *</label>
+        <input type="password" id="pwConfirm" placeholder="ripeti la nuova password" autocomplete="new-password" required>
+      </div>
+      <div class="login-err" id="pwErr" style="display:none;margin-bottom:0.6rem"></div>
+      <div style="display:flex;gap:0.6rem;margin-top:0.5rem">
+        <button type="submit" class="btn-add" id="pwSubmit" style="flex:1">Aggiorna password</button>
+        <button type="button" id="pwCancel" style="background:#1a1a1a;border:1px solid #333;color:#888;border-radius:8px;padding:0.7rem 1.1rem;cursor:pointer;font-size:0.85rem">Annulla</button>
+      </div>
+    </form>
+  </div>
+</div>
 
 <div class="toasts"></div>
 <script src="script.js"></script>

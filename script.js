@@ -485,12 +485,22 @@ async function initAdmin() {
         }
     });
 
-    // ── Cambia password ──
+    // ── Cambia password (modale) ──
     const pwForm = document.getElementById('pwForm');
     if (pwForm) {
         const pwErr    = document.getElementById('pwErr');
         const pwSubmit = document.getElementById('pwSubmit');
+        const pwModal  = document.getElementById('pwModal');
+        const btnPw    = document.getElementById('btnChangePw');
+        const btnCancelPw = document.getElementById('pwCancel');
         const showErr  = msg => { pwErr.textContent = msg; pwErr.style.display = 'block'; };
+
+        const openPw  = () => { pwForm.reset(); pwErr.style.display = 'none'; pwModal.classList.add('on'); document.getElementById('pwCurrent').focus(); };
+        const closePw = () => pwModal.classList.remove('on');
+
+        btnPw?.addEventListener('click', openPw);
+        btnCancelPw?.addEventListener('click', closePw);
+        pwModal?.addEventListener('click', e => { if (e.target === pwModal) closePw(); });
 
         pwForm.addEventListener('submit', async e => {
             e.preventDefault();
@@ -512,6 +522,7 @@ async function initAdmin() {
                 });
                 toast('Password aggiornata. Usala al prossimo accesso.', 'success');
                 pwForm.reset();
+                closePw();
             } catch (err) {
                 showErr(err.message);
             } finally {
