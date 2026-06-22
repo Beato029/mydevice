@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contatti — MyDevice</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="icon" href="logo.jpg" type="image/jpeg">
+</head>
+<body data-page="contatti">
+
+<nav>
+  <a href="index.html" class="nav-brand">
+    <img src="logo.jpg" alt="MyDevice">
+    <span class="nav-brand-name">My<em>Device</em></span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="index.html">Catalogo</a></li>
+    <li><a href="contatti.html">Contatti</a></li>
+    <li><a href="admin.html" class="nav-admin">Admin</a></li>
+  </ul>
+  <div class="burger" role="button" aria-label="menu">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+
+<section class="pg-contatti">
+  <h1 class="pg-title">Parla<br>con <em>noi.</em></h1>
+  <p class="pg-sub">Siamo a Bologna. Rispondiamo veloce.</p>
+
+  <div class="cont-layout">
+
+    <div class="cont-block">
+      <h3>Negozio</h3>
+      <div class="cont-row">
+        <div class="cont-icon">📍</div>
+        <div class="cont-text">
+          <label>Indirizzo</label>
+          <p>Via Esempio 42<br>40100 Bologna (BO)</p>
+        </div>
+      </div>
+      <div class="cont-row">
+        <div class="cont-icon">📞</div>
+        <div class="cont-text">
+          <label>WhatsApp / Tel</label>
+          <a href="tel:+39051000000">+39 051 000 000</a>
+        </div>
+      </div>
+      <div class="cont-row">
+        <div class="cont-icon">✉️</div>
+        <div class="cont-text">
+          <label>Email</label>
+          <a href="mailto:info@mydevice.it">info@mydevice.it</a>
+        </div>
+      </div>
+      <div class="cont-row">
+        <div class="cont-icon">🕐</div>
+        <div class="cont-text">
+          <label>Orari</label>
+          <p>Lun–Sab 09:00–19:00</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="cont-block">
+      <h3>Garanzie</h3>
+      <div class="cont-row">
+        <div class="cont-icon">🔍</div>
+        <div class="cont-text">
+          <label>Controllo qualità</label>
+          <p>Ogni iPhone testato su 50+ parametri prima della vendita.</p>
+        </div>
+      </div>
+      <div class="cont-row">
+        <div class="cont-icon">🛡️</div>
+        <div class="cont-text">
+          <label>Garanzia</label>
+          <p>12 mesi inclusi su tutti i dispositivi.</p>
+        </div>
+      </div>
+      <div class="cont-row">
+        <div class="cont-icon">🔄</div>
+        <div class="cont-text">
+          <label>Reso</label>
+          <p>30 giorni di reso senza domande.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="map-container">
+      <iframe
+        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d91290.99655556773!2d11.27573!3d44.49381!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x477fd49bf8595b47%3A0x70f29890a3f72a72!2sBologna%2C%20Metropolitan%20City%20of%20Bologna%2C%20Italy!5e0!3m2!1sen!2s!4v1234567890"
+        allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade">
+      </iframe>
+    </div>
+
+    <div class="form-block">
+      <h3>Scrivici</h3>
+      <form id="cForm">
+        <div class="f-row">
+          <div class="f-group">
+            <label>Nome</label>
+            <input type="text" placeholder="Mario Rossi" required>
+          </div>
+          <div class="f-group">
+            <label>Email</label>
+            <input type="email" placeholder="mario@email.it" required>
+          </div>
+        </div>
+        <div class="f-group">
+          <label>Messaggio</label>
+          <textarea placeholder="Di cosa hai bisogno?" required></textarea>
+        </div>
+        <button type="submit" class="btn-send">Invia messaggio</button>
+      </form>
+    </div>
+
+  </div>
+</section>
+
+<footer>
+  <div class="footer-brand">
+    <img src="logo.jpg" alt="MyDevice">
+    <span class="footer-brand-name">MyDevice</span>
+  </div>
+  <ul class="footer-nav">
+    <li><a href="index.html">Catalogo</a></li>
+    <li><a href="contatti.html">Contatti</a></li>
+  </ul>
+  <p class="footer-copy">© 2025 MyDevice · Bologna, Italia</p>
+</footer>
+
+<div class="toasts"></div>
+<script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MyDevice — iPhone usati e ricondizionati</title>
+  <meta name="description" content="iPhone usati e ricondizionati selezionati. Bologna.">
+  <link rel="stylesheet" href="style.css">
+  <link rel="icon" href="logo.jpg" type="image/jpeg">
+</head>
+<body data-page="index">
+
+<nav>
+  <a href="index.html" class="nav-brand">
+    <img src="logo.jpg" alt="MyDevice">
+    <span class="nav-brand-name">My<em>Device</em></span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="index.html">Catalogo</a></li>
+    <li><a href="contatti.html">Contatti</a></li>
+    <li><a href="admin.html" class="nav-admin">Admin</a></li>
+  </ul>
+  <div class="burger" role="button" aria-label="menu">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="hero-eyebrow">Bologna · Ricondizionati certificati</div>
+  <h1>iPhone<br><span class="dim">al giusto</span><br>prezzo.</h1>
+  <p class="hero-sub">Selezioniamo ogni dispositivo a mano. Niente sorprese, niente trucchi.</p>
+  <div class="hero-numbers">
+    <div class="hero-num">
+      <div class="hero-num-val" id="statCount">12+</div>
+      <div class="hero-num-label">in catalogo</div>
+    </div>
+    <div class="hero-num">
+      <div class="hero-num-val">12 mesi</div>
+      <div class="hero-num-label">garanzia</div>
+    </div>
+    <div class="hero-num">
+      <div class="hero-num-val">24/48h</div>
+      <div class="hero-num-label">spedizione</div>
+    </div>
+  </div>
+</section>
+
+<section class="toolbar">
+  <div class="search-wrap">
+    <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+      <circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/>
+    </svg>
+    <input type="text" id="searchInput" placeholder="Cerca modello o colore...">
+  </div>
+  <div class="filters">
+    <div class="fg">
+      <label>Colore</label>
+      <select id="fCol">
+        <option value="">Tutti</option>
+        <option>Nero</option><option>Bianco</option><option>Oro</option>
+        <option>Blu</option><option>Rosa</option><option>Verde</option>
+        <option>Viola</option><option>Rosso</option><option>Titanio</option>
+      </select>
+    </div>
+    <div class="fg">
+      <label>Batteria</label>
+      <select id="fBat">
+        <option value="">Tutti</option>
+        <option>Nuova</option><option>Ottima</option>
+        <option>Buona</option><option>Usurata</option>
+      </select>
+    </div>
+    <div class="fg">
+      <label>Condizioni</label>
+      <select id="fCon">
+        <option value="">Tutti</option>
+        <option>Perfetto</option><option>Ottimo</option>
+        <option>Buono</option><option>Pessimo</option>
+      </select>
+    </div>
+    <div class="sort-group">
+      <button class="btn-s" id="btnA">prezzo ↑</button>
+      <button class="btn-s" id="btnD">prezzo ↓</button>
+      <button class="btn-reset" id="btnR">reset</button>
+    </div>
+  </div>
+</section>
+
+<section class="catalog">
+  <div class="catalog-meta"><span id="cnt">12</span> dispositivi</div>
+  <div class="grid" id="grid"></div>
+</section>
+
+<footer>
+  <div class="footer-brand">
+    <img src="logo.jpg" alt="MyDevice">
+    <span class="footer-brand-name">MyDevice</span>
+  </div>
+  <ul class="footer-nav">
+    <li><a href="index.html">Catalogo</a></li>
+    <li><a href="contatti.html">Contatti</a></li>
+    <li><a href="admin.html">Admin</a></li>
+  </ul>
+  <p class="footer-copy">© 2025 MyDevice · Bologna, Italia</p>
+</footer>
+
+<div class="modal-bg" id="modal">
+  <div class="modal-box">
+    <h3 id="mTitle"></h3>
+    <p id="mMsg"></p>
+    <div class="modal-btns">
+      <button class="mbtn-p" id="mContact">Contattaci</button>
+      <button class="mbtn-s" id="mClose">Chiudi</button>
+    </div>
+  </div>
+</div>
+
+<div class="toasts"></div>
+<script src="script.js"></script>
+</body>
+</html>

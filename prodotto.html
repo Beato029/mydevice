@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Prodotto — MyDevice</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="icon" href="logo.jpg" type="image/jpeg">
+</head>
+<body data-page="prodotto">
+
+<nav>
+  <a href="index.html" class="nav-brand">
+    <img src="logo.jpg" alt="MyDevice">
+    <span class="nav-brand-name">My<em>Device</em></span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="index.html">Catalogo</a></li>
+    <li><a href="contatti.html">Contatti</a></li>
+    <li><a href="admin.html" class="nav-admin">Admin</a></li>
+  </ul>
+  <div class="burger" role="button" aria-label="menu">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+
+<section class="pg-product">
+  <div id="pdBox"></div>
+</section>
+
+<footer>
+  <div class="footer-brand">
+    <img src="logo.jpg" alt="MyDevice">
+    <span class="footer-brand-name">MyDevice</span>
+  </div>
+  <ul class="footer-nav">
+    <li><a href="index.html">Catalogo</a></li>
+    <li><a href="contatti.html">Contatti</a></li>
+  </ul>
+  <p class="footer-copy">© 2025 MyDevice · Bologna, Italia</p>
+</footer>
+
+<div class="modal-bg" id="modal">
+  <div class="modal-box">
+    <h3 id="mTitle"></h3>
+    <p id="mMsg"></p>
+    <div class="modal-btns">
+      <button class="mbtn-p" id="mContact">Contattaci</button>
+      <button class="mbtn-s" id="mClose">Chiudi</button>
+    </div>
+  </div>
+</div>
+
+<div class="toasts"></div>
+<script src="script.js"></script>
+</body>
+</html>

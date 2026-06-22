@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin — MyDevice</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="icon" href="logo.jpg" type="image/jpeg">
+</head>
+<body data-page="admin">
+
+<nav>
+  <a href="index.html" class="nav-brand">
+    <img src="logo.jpg" alt="MyDevice">
+    <span class="nav-brand-name">My<em>Device</em></span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="index.html">Catalogo</a></li>
+    <li><a href="contatti.html">Contatti</a></li>
+    <li><a href="admin.html" class="nav-admin">Admin</a></li>
+  </ul>
+  <div class="burger" role="button" aria-label="menu">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+
+<section class="pg-admin">
+  <div class="admin-header" style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;margin-bottom:0.5rem">
+    <div>
+      <h1 class="pg-title" style="margin-bottom:0">Pannello <em>Admin</em></h1>
+      <p class="pg-sub" style="margin-top:0.25rem">Gestisci il catalogo.</p>
+    </div>
+    <button id="btnLogout" style="background:#1a1a1a;border:1px solid #333;color:#888;border-radius:8px;padding:0.5rem 1.25rem;font-size:0.85rem;cursor:pointer;transition:color .2s,border-color .2s" onmouseover="this.style.color='#ff3b30';this.style.borderColor='rgba(255,59,48,.4)'" onmouseout="this.style.color='#888';this.style.borderColor='#333'">Esci</button>
+  </div>
+
+  <div class="admin-layout">
+
+    <div class="admin-form">
+      <h3>Aggiungi prodotto</h3>
+      <form id="aForm">
+        <div class="f-group">
+          <label>Nome *</label>
+          <input type="text" id="aNome" placeholder="iPhone 15 Pro Max" required>
+        </div>
+        <div class="f-group">
+          <label>Prezzo € *</label>
+          <input type="number" id="aPrezzo" placeholder="999" min="1" required>
+        </div>
+        <div class="f-group">
+          <label>Immagine — carica file</label>
+          <input type="file" id="aImgFile" accept="image/jpeg,image/png,image/webp,image/gif" style="background:#1a1a1a;border:1px solid #2a2a2a;border-radius:8px;padding:0.6rem 0.75rem;color:#aaa;width:100%;box-sizing:border-box;font-size:0.85rem;cursor:pointer">
+        </div>
+        <div class="f-group">
+          <label>oppure URL immagine</label>
+          <input type="url" id="aImgUrl" placeholder="https://...">
+        </div>
+        <div class="f-group" id="imgPreviewWrap" style="display:none">
+          <img id="imgPreview" src="" alt="Anteprima" style="width:100%;max-height:180px;object-fit:contain;border-radius:8px;border:1px solid #2a2a2a;background:#0d0d0d">
+        </div>
+        <div class="f-group">
+          <label>Colore *</label>
+          <select id="aCol" required>
+            <option value="">—</option>
+            <option>Nero</option><option>Bianco</option><option>Oro</option>
+            <option>Blu</option><option>Rosa</option><option>Verde</option>
+            <option>Viola</option><option>Rosso</option><option>Titanio</option><option>Argento</option>
+          </select>
+        </div>
+        <div class="f-group">
+          <label>Batteria *</label>
+          <select id="aBat" required>
+            <option value="">—</option>
+            <option>Nuova</option><option>Ottima</option>
+            <option>Buona</option><option>Usurata</option>
+          </select>
+        </div>
+        <div class="f-group">
+          <label>Condizioni *</label>
+          <select id="aCon" required>
+            <option value="">—</option>
+            <option>Perfetto</option><option>Ottimo</option>
+            <option>Buono</option><option>Pessimo</option>
+          </select>
+        </div>
+        <div class="f-group">
+          <label>Descrizione</label>
+          <textarea id="aDesc" placeholder="Note sul dispositivo..." style="min-height:72px"></textarea>
+        </div>
+        <button type="submit" class="btn-add">Aggiungi</button>
+      </form>
+    </div>
+
+    <div class="admin-list">
+      <h3>Catalogo attuale</h3>
+      <div id="aList"></div>
+    </div>
+
+  </div>
+</section>
+
+<footer>
+  <div class="footer-brand">
+    <img src="logo.jpg" alt="MyDevice">
+    <span class="footer-brand-name">MyDevice</span>
+  </div>
+  <ul class="footer-nav">
+    <li><a href="index.html">Catalogo</a></li>
+  </ul>
+  <p class="footer-copy">© 2025 MyDevice · Bologna, Italia</p>
+</footer>
+
+<div class="toasts"></div>
+<script src="script.js"></script>
+</body>
+</html>
