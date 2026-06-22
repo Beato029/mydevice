@@ -190,11 +190,28 @@ async function initProduct() {
 
     document.title = p.nome + ' — MyDevice';
 
+    let imgs = Array.isArray(p.immagini) ? p.immagini.filter(Boolean) : [];
+    if (!imgs.length && p.immagine) imgs = [p.immagine];
+    if (!imgs.length) imgs = [imgPlaceholder];
+
+    const thumbs = imgs.length > 1
+        ? `<div class="pd-thumbs">${imgs.map((u, i) =>
+            `<button class="pd-thumb${i === 0 ? ' active' : ''}" data-i="${i}"><img src="${u}" alt="" onerror="imgFallback(this)"></button>`).join('')}</div>`
+        : '';
+    const arrows = imgs.length > 1
+        ? `<button class="pd-arrow prev" id="pdPrev" aria-label="precedente">‹</button>
+           <button class="pd-arrow next" id="pdNext" aria-label="successiva">›</button>`
+        : '';
+
     box.innerHTML = `
         <button class="back" onclick="history.back()">← catalogo</button>
         <div class="pd-grid">
-            <div class="pd-img-box">
-                <img src="${p.immagine || imgPlaceholder}" alt="${p.nome}" onerror="imgFallback(this)">
+            <div class="pd-gallery">
+                <div class="pd-main">
+                    ${arrows}
+                    <img id="pdMainImg" src="${imgs[0]}" alt="${p.nome}" onerror="imgFallback(this)">
+                </div>
+                ${thumbs}
             </div>
             <div class="pd-info">
                 <h1>${p.nome}</h1>
@@ -209,6 +226,21 @@ async function initProduct() {
                 <button class="btn-buy" id="btnBuy">Acquista — €${parseFloat(p.prezzo).toLocaleString('it-IT')}</button>
             </div>
         </div>`;
+
+    // ── Galleria ──
+    if (imgs.length > 1) {
+        let cur = 0;
+        const mainImg = document.getElementById('pdMainImg');
+        const thumbBtns = [...box.querySelectorAll('.pd-thumb')];
+        const show = i => {
+            cur = (i + imgs.length) % imgs.length;
+            mainImg.src = imgs[cur];
+            thumbBtns.forEach((b, j) => b.classList.toggle('active', j === cur));
+        };
+        thumbBtns.forEach(b => b.addEventListener('click', () => show(parseInt(b.dataset.i))));
+        document.getElementById('pdPrev')?.addEventListener('click', () => show(cur - 1));
+        document.getElementById('pdNext')?.addEventListener('click', () => show(cur + 1));
+    }
 
     document.getElementById('btnBuy').addEventListener('click', () => {
         const m = document.getElementById('modal');
@@ -268,12 +300,46 @@ async function initAdmin() {
     // Verifica login
     if (!getToken()) { location.href = 'login.html'; return; }
 
-    const form     = document.getElementById('aForm');
-    const list     = document.getElementById('aList');
-    const imgInput = document.getElementById('aImgFile');
-    const imgUrl   = document.getElementById('aImgUrl');
-    const imgPrev  = document.getElementById('imgPreview');
+    const form      = document.getElementById('aForm');
+    const list      = document.getElementById('aList');
+    const imgInput  = document.getElementById('aImgFile');
+    const imgUrl    = document.getElementById('aImgUrl');
+    const imgUrlAdd = document.getElementById('aImgUrlAdd');
+    const gallery   = document.getElementById('imgGallery');
+    const galWrap   = document.getElementById('imgGalleryWrap');
+    const formTitle = document.getElementById('aFormTitle');
+    const editIdEl  = document.getElementById('aEditId');
+    const btnCancel = document.getElementById('aCancel');
     const btnLogout = document.getElementById('btnLogout');
+    const btnAdd    = form.querySelector('.btn-add');
+
+    // Stato immagini (la prima è la copertina)
+    let images = [];
+
+    function renderGallery() {
+        if (!images.length) { galWrap.style.display = 'none'; gallery.innerHTML = ''; return; }
+        galWrap.style.display = 'block';
+        gallery.innerHTML = images.map((u, i) => `
+            <div class="admin-img${i === 0 ? ' cover' : ''}">
+                ${i === 0 ? '<span class="badge">COPERTINA</span>' : ''}
+                <img src="${u}" alt="" onerror="imgFallback(this)">
+                <div class="ctrls">
+                    <button type="button" data-act="left" data-i="${i}" title="sposta a sinistra">‹</button>
+                    <button type="button" class="rm" data-act="rm" data-i="${i}" title="rimuovi">✕</button>
+                    <button type="button" data-act="right" data-i="${i}" title="sposta a destra">›</button>
+                </div>
+            </div>`).join('');
+    }
+
+    gallery?.addEventListener('click', e => {
+        const b = e.target.closest('button[data-act]');
+        if (!b) return;
+        const i = parseInt(b.dataset.i), act = b.dataset.act;
+        if (act === 'rm') images.splice(i, 1);
+        else if (act === 'left' && i > 0) { [images[i-1], images[i]] = [images[i], images[i-1]]; }
+        else if (act === 'right' && i < images.length - 1) { [images[i+1], images[i]] = [images[i], images[i+1]]; }
+        renderGallery();
+    });
 
     // Logout
     btnLogout?.addEventListener('click', async () => {
@@ -282,20 +348,16 @@ async function initAdmin() {
         location.href = 'login.html';
     });
 
-    // Anteprima immagine
-    let uploadedUrl = '';
-
+    // Upload file multipli
     imgInput?.addEventListener('change', async () => {
-        const file = imgInput.files[0];
-        if (!file) return;
-
-        imgPrev.src = URL.createObjectURL(file);
-        imgPrev.style.display = 'block'; document.getElementById('imgPreviewWrap') && (document.getElementById('imgPreviewWrap').style.display = 'block');
+        const files = [...imgInput.files];
+        if (!files.length) return;
 
         const fd = new FormData();
-        fd.append('image', file);
+        files.forEach(f => fd.append('images[]', f));
 
         const token = getToken();
+        toast('Caricamento immagini...', 'success');
         try {
             const res = await fetch(API + '/upload.php', {
                 method: 'POST',
@@ -304,20 +366,52 @@ async function initAdmin() {
             });
             const data = await res.json();
             if (!res.ok) throw new Error(data.error);
-            uploadedUrl = data.url;
-            imgUrl.value = uploadedUrl;
-            toast('Immagine caricata.', 'success');
+            const urls = data.urls || (data.url ? [data.url] : []);
+            images.push(...urls);
+            renderGallery();
+            imgInput.value = '';
+            toast(urls.length + ' immagine/i caricate.', 'success');
         } catch (e) {
             toast('Upload fallito: ' + e.message, 'error');
         }
     });
 
-    imgUrl?.addEventListener('input', () => {
-        if (imgUrl.value && !imgInput.files[0]) {
-            imgPrev.src = imgUrl.value;
-            imgPrev.style.display = 'block'; document.getElementById('imgPreviewWrap') && (document.getElementById('imgPreviewWrap').style.display = 'block');
-        }
+    // Aggiungi per URL
+    imgUrlAdd?.addEventListener('click', () => {
+        const u = imgUrl.value.trim();
+        if (!u) return;
+        images.push(u);
+        imgUrl.value = '';
+        renderGallery();
     });
+
+    function resetForm() {
+        form.reset();
+        images = [];
+        renderGallery();
+        editIdEl.value = '';
+        formTitle.textContent = 'Aggiungi prodotto';
+        btnAdd.textContent = 'Aggiungi';
+        btnCancel.style.display = 'none';
+    }
+
+    btnCancel?.addEventListener('click', resetForm);
+
+    async function startEdit(p) {
+        editIdEl.value = p.id;
+        document.getElementById('aNome').value   = p.nome || '';
+        document.getElementById('aPrezzo').value = p.prezzo || '';
+        document.getElementById('aCol').value    = p.colore || '';
+        document.getElementById('aBat').value    = p.batteria || '';
+        document.getElementById('aCon').value    = p.condizioni || '';
+        document.getElementById('aDesc').value   = p.descrizione || '';
+        images = Array.isArray(p.immagini) ? p.immagini.filter(Boolean) : (p.immagine ? [p.immagine] : []);
+        renderGallery();
+        formTitle.textContent = 'Modifica prodotto';
+        btnAdd.textContent = 'Salva modifiche';
+        btnCancel.style.display = 'block';
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
 
     async function renderList() {
         list.innerHTML = '<div class="admin-empty">Caricamento...</div>';
@@ -332,15 +426,18 @@ async function initAdmin() {
             const row = document.createElement('div');
             row.className = 'admin-row';
             row.style.animationDelay = i * 0.025 + 's';
+            const n = Array.isArray(p.immagini) ? p.immagini.length : (p.immagine ? 1 : 0);
             row.innerHTML = `
                 <img class="admin-row-img" src="${p.immagine || imgPlaceholder}" alt="${p.nome}" onerror="imgFallback(this)">
                 <div class="admin-row-info">
                     <div class="admin-row-name">${p.nome}</div>
-                    <div class="admin-row-meta">${p.colore} · bat. ${p.batteria} · ${p.condizioni}</div>
+                    <div class="admin-row-meta">${p.colore} · bat. ${p.batteria} · ${p.condizioni}${n > 1 ? ' · ' + n + ' foto' : ''}</div>
                 </div>
                 <div class="admin-row-price">€${parseFloat(p.prezzo).toLocaleString('it-IT')}</div>
+                <button class="btn-edit" data-id="${p.id}">modifica</button>
                 <button class="btn-del" data-id="${p.id}">elimina</button>`;
             list.appendChild(row);
+            row.querySelector('.btn-edit').addEventListener('click', () => startEdit(p));
         });
 
         list.querySelectorAll('.btn-del').forEach(btn => {
@@ -349,6 +446,7 @@ async function initAdmin() {
                 try {
                     await apiFetch('/products.php?id=' + btn.dataset.id, { method: 'DELETE' });
                     toast('Prodotto eliminato.', 'success');
+                    if (editIdEl.value == btn.dataset.id) resetForm();
                     renderList();
                 } catch (e) {
                     toast('Errore: ' + e.message, 'error');
@@ -360,40 +458,40 @@ async function initAdmin() {
     form.addEventListener('submit', async e => {
         e.preventDefault();
 
-        const nome       = document.getElementById('aNome').value.trim();
-        const prezzo     = parseFloat(document.getElementById('aPrezzo').value);
-        const immagine   = imgUrl.value.trim();
-        const colore     = document.getElementById('aCol').value;
-        const batteria   = document.getElementById('aBat').value;
-        const condizioni = document.getElementById('aCon').value;
+        const nome        = document.getElementById('aNome').value.trim();
+        const prezzo      = parseFloat(document.getElementById('aPrezzo').value);
+        const colore      = document.getElementById('aCol').value;
+        const batteria    = document.getElementById('aBat').value;
+        const condizioni  = document.getElementById('aCon').value;
         const descrizione = document.getElementById('aDesc').value.trim();
+        const editId      = editIdEl.value;
 
         if (!nome || !prezzo || !colore || !batteria || !condizioni) {
             toast('Compila tutti i campi obbligatori.', 'error');
             return;
         }
 
-        const btn = form.querySelector('.btn-add');
-        btn.disabled = true;
-        btn.textContent = 'Salvataggio...';
+        btnAdd.disabled = true;
+        const wasEdit = !!editId;
+        btnAdd.textContent = 'Salvataggio...';
+
+        const payload = { nome, prezzo, colore, batteria, condizioni, descrizione, immagini: images, immagine: images[0] || '' };
 
         try {
-            await apiFetch('/products.php', {
-                method: 'POST',
-                body: JSON.stringify({ nome, prezzo, immagine, colore, batteria, condizioni, descrizione })
-            });
-            toast(nome + ' aggiunto.', 'success');
-            form.reset();
-            uploadedUrl = '';
-            imgPrev.style.display = 'none'; document.getElementById('imgPreviewWrap') && (document.getElementById('imgPreviewWrap').style.display = 'none');
-            imgPrev.src = '';
-            imgUrl.value = '';
+            if (wasEdit) {
+                await apiFetch('/products.php?id=' + editId, { method: 'PATCH', body: JSON.stringify(payload) });
+                toast(nome + ' aggiornato.', 'success');
+            } else {
+                await apiFetch('/products.php', { method: 'POST', body: JSON.stringify(payload) });
+                toast(nome + ' aggiunto.', 'success');
+            }
+            resetForm();
             renderList();
         } catch (e) {
             toast('Errore: ' + e.message, 'error');
         } finally {
-            btn.disabled = false;
-            btn.textContent = 'Aggiungi';
+            btnAdd.disabled = false;
+            btnAdd.textContent = wasEdit ? 'Salva modifiche' : 'Aggiungi';
         }
     });
 

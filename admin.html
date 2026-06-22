@@ -36,8 +36,9 @@
   <div class="admin-layout">
 
     <div class="admin-form">
-      <h3>Aggiungi prodotto</h3>
+      <h3 id="aFormTitle">Aggiungi prodotto</h3>
       <form id="aForm">
+        <input type="hidden" id="aEditId" value="">
         <div class="f-group">
           <label>Nome *</label>
           <input type="text" id="aNome" placeholder="iPhone 15 Pro Max" required>
@@ -47,15 +48,19 @@
           <input type="number" id="aPrezzo" placeholder="999" min="1" required>
         </div>
         <div class="f-group">
-          <label>Immagine — carica file</label>
-          <input type="file" id="aImgFile" accept="image/jpeg,image/png,image/webp,image/gif" style="background:#1a1a1a;border:1px solid #2a2a2a;border-radius:8px;padding:0.6rem 0.75rem;color:#aaa;width:100%;box-sizing:border-box;font-size:0.85rem;cursor:pointer">
+          <label>Immagini — carica file (più di una)</label>
+          <input type="file" id="aImgFile" accept="image/jpeg,image/png,image/webp,image/gif" multiple style="background:#1a1a1a;border:1px solid #2a2a2a;border-radius:8px;padding:0.6rem 0.75rem;color:#aaa;width:100%;box-sizing:border-box;font-size:0.85rem;cursor:pointer">
         </div>
         <div class="f-group">
-          <label>oppure URL immagine</label>
-          <input type="url" id="aImgUrl" placeholder="https://...">
+          <label>oppure aggiungi per URL</label>
+          <div style="display:flex;gap:0.5rem">
+            <input type="url" id="aImgUrl" placeholder="https://..." style="flex:1">
+            <button type="button" id="aImgUrlAdd" style="background:#1a1a1a;border:1px solid #2a2a2a;color:#2196F3;border-radius:8px;padding:0 0.9rem;cursor:pointer;font-size:1.1rem;line-height:1">+</button>
+          </div>
         </div>
-        <div class="f-group" id="imgPreviewWrap" style="display:none">
-          <img id="imgPreview" src="" alt="Anteprima" style="width:100%;max-height:180px;object-fit:contain;border-radius:8px;border:1px solid #2a2a2a;background:#0d0d0d">
+        <div class="f-group" id="imgGalleryWrap" style="display:none">
+          <label>Immagini prodotto — la prima è la copertina (trascina o usa le frecce)</label>
+          <div id="imgGallery" class="admin-imgs"></div>
         </div>
         <div class="f-group">
           <label>Colore *</label>
@@ -87,6 +92,7 @@
           <textarea id="aDesc" placeholder="Note sul dispositivo..." style="min-height:72px"></textarea>
         </div>
         <button type="submit" class="btn-add">Aggiungi</button>
+        <button type="button" class="btn-cancel" id="aCancel" style="display:none;width:100%;margin-top:0.5rem;background:#1a1a1a;border:1px solid #333;color:#888;border-radius:8px;padding:0.7rem;cursor:pointer;font-size:0.85rem">Annulla modifica</button>
       </form>
     </div>
 
