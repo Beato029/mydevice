@@ -1,6 +1,6 @@
 FROM php:8.3-cli
 
-# Installa estensioni necessarie (curl per chiamate Supabase)
+# Estensione curl per le chiamate a Supabase
 RUN apt-get update && apt-get install -y \
     libcurl4-openssl-dev \
     && docker-php-ext-install curl \
@@ -9,8 +9,10 @@ RUN apt-get update && apt-get install -y \
 WORKDIR /app
 COPY . /app
 
-# Render imposta la variabile PORT — la usiamo nel router
+# Render fornisce $PORT a runtime
+ENV PORT=10000
 EXPOSE 10000
 
-# Avvia il server PHP built-in con router
-CMD php -S 0.0.0.0:${PORT:-10000} router.php
+# Usa lo start script così $PORT viene espanso correttamente a runtime
+RUN chmod +x /app/start.sh
+CMD ["/app/start.sh"]
