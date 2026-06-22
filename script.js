@@ -72,7 +72,7 @@ function initNav() {
     links.querySelectorAll('a').forEach(a => a.addEventListener('click', () => links.classList.remove('on')));
 
     const page = document.body.dataset.page;
-    const map  = { index: 'index.html', prodotto: 'prodotto.html', contatti: 'contatti.html', admin: 'admin.html', login: 'login.html' };
+    const map  = { index: 'index.html', prodotto: 'prodotto.html', contatti: 'contatti.html', admin: 'admin.html', login: 'admin-login-page.html' };
     links.querySelectorAll('a').forEach(a => {
         if (a.getAttribute('href') === map[page]) a.classList.add('on');
     });
@@ -298,7 +298,7 @@ function initLogin() {
 // ── ADMIN ──
 async function initAdmin() {
     // Verifica login
-    if (!getToken()) { location.href = 'login.html'; return; }
+    if (!getToken()) { location.href = 'admin-login-page.html'; return; }
 
     const form      = document.getElementById('aForm');
     const list      = document.getElementById('aList');
@@ -345,7 +345,7 @@ async function initAdmin() {
     btnLogout?.addEventListener('click', async () => {
         try { await apiFetch('/auth.php', { method: 'DELETE' }); } catch {}
         localStorage.removeItem('md_admin_token');
-        location.href = 'login.html';
+        location.href = 'admin-login-page.html';
     });
 
     // Upload file multipli
