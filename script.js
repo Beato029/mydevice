@@ -251,16 +251,6 @@ async function initProduct() {
 }
 
 // ── CONTATTI ──
-function initContatti() {
-    const form = document.getElementById('cForm');
-    if (!form) return;
-    form.addEventListener('submit', e => {
-        e.preventDefault();
-        toast('Messaggio inviato, ti risponderemo presto.', 'success');
-        form.reset();
-    });
-}
-
 // ── LOGIN ──
 function initLogin() {
     // Se già loggato, vai ad admin
@@ -514,7 +504,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const p = document.body.dataset.page;
     if (p === 'index')    initIndex();
     if (p === 'prodotto') initProduct();
-    if (p === 'contatti') initContatti();
     if (p === 'login')    initLogin();
     if (p === 'admin')    initAdmin();
 });
